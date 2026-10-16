@@ -102,15 +102,49 @@ Keep the name under the `@slates-integrations/` scope and keep the `build`, `tes
 }
 ```
 
+## Developing and Testing Locally
+
+Build, test and typecheck a single integration from its own directory:
+
+```bash
+cd integrations/your-integration
+bun run build
+bun run test
+bun run typecheck
+```
+
+The repo also ships a CLI for exercising an integration interactively. Run it through the root script, passing the integration name first:
+
+```bash
+bun run integrations:cli your-integration setup
+bun run integrations:cli your-integration tools list
+bun run integrations:cli your-integration tools get <toolId>
+bun run integrations:cli your-integration tools call <toolId>
+```
+
+Run the test suites of all integrations:
+
+```bash
+bun run integrations:cli test
+```
+
 ## Before You Submit
 
 1. Make sure your code follows any existing conventions and structure.
-2. Build your changes and fix any errors or warnings.
-3. Commit your changes with a clear message:
+2. Format and lint with [Biome](https://biomejs.dev/):
+   ```bash
+   bun run biome:check
+   ```
+3. Reproduce the CI check locally. Every pull request that is ready for review runs [`changed-integrations-pr.yml`](./.github/workflows/changed-integrations-pr.yml), which builds the integrations your PR touched and diffs their tool schemas against the base branch:
+   ```bash
+   bun run packages:build
+   bun run integrations:validate-pr -- --base <base-branch-or-sha>
+   ```
+4. Commit your changes with a clear message:
    ```bash
    git commit -m "Add new integration: <name>"
    ```
-4. Push your branch to your fork:
+5. Push your branch to your fork:
    ```bash
    git push origin your-branch-name
    ```
@@ -121,6 +155,8 @@ Keep the name under the `@slates-integrations/` scope and keep the `build`, `tes
 - Click **"Compare & pull request"**.
 - Fill in the [pull request template](./.github/PULL_REQUEST_TEMPLATE.md) — summary, changes, and any related issues.
 - Hit **"Create pull request"**.
+
+Draft pull requests skip the integration validation workflow; it runs once the PR is marked ready for review and posts its report as a comment.
 
 One of the maintainers will review your contribution and work with you to get it merged.
 
