@@ -1,22 +1,21 @@
 # Contributing Guide
 
 First off — thank you for your interest in contributing to this project!  
-We welcome contributions from everyone and truly appreciate your help in improving our MCP container system or adding new MCP containers.
+We welcome contributions from everyone and truly appreciate your help in improving Metorial's integrations.
 
 ## What Can You Contribute?
 
-Most contributors want to **add a new MCP server**, and we've made that super easy using a script in the `scripts/add-server` directory.
-You may also contribute other things.
+Most contributors want to **add a new integration**. Integrations live in the [`integrations/`](./integrations) directory and are built on the [`slates`](https://www.npmjs.com/package/slates) framework.
+You may also contribute bug fixes, docs, or improvements to the shared packages in [`packages/`](./packages).
 
 ## Prerequisites
 
 Before getting started, please make sure you have the following installed:
 
-- [**Bun**](https://bun.sh/) — A fast all-in-one JavaScript runtime
-- [**Docker**](https://www.docker.com/) — Used to build and run containerized environments
-- [**Nixpacks**](https://nixpacks.com/docs/install) — Used to generate and build container images without needing Dockerfiles
+- [**Bun**](https://bun.sh/) `>=1.4.0` — this repo pins `bun@1.4.0` (see `packageManager` in `package.json`)
+- [**Node.js**](https://nodejs.org/) `>=18` — CI runs Node 20
 
-Make sure `docker` and `nixpacks` are accessible from your command line after installation.
+Integrations are TypeScript packages, so Docker and Nixpacks are not needed.
 
 ## Setup Instructions
 
@@ -27,8 +26,8 @@ Follow these steps to get your environment ready and contribute:
 
 2. **Clone your fork**
    ```bash
-   git clone https://github.com/YOUR-USERNAME/REPO-NAME.git
-   cd REPO-NAME
+   git clone https://github.com/YOUR-USERNAME/metorial.git
+   cd metorial
    ```
 
 3. **Install dependencies**
@@ -36,29 +35,21 @@ Follow these steps to get your environment ready and contribute:
    bun install
    ```
 
-4. **Run the add-server script**
+4. **Build the shared packages**  
+   Integrations depend on the workspace packages, so build them before building an integration:
    ```bash
-   bun add-server
+   bun run packages:build
    ```
-
-5. **Follow the interactive prompts** to configure and create your new MCP server.
-   1. Make sure to check the server manifest when prompted.
-   2. The `add-server` script will run a test build to ensure everything is set up correctly.
-   3. If you encounter any issues during the build, please ensure to fix them before proceeding.
-
-6. **Verify your addition**  
-   Check the `catalog/` directory — your new server config should be listed there.
 
 ## Before You Submit
 
 1. Make sure your code follows any existing conventions and structure.
-2. Double-check that your server shows up correctly in the `catalog/` folder.
-3. Run the build and fix any errors or warnings.
-4. Commit your changes with a clear message:
+2. Build your changes and fix any errors or warnings.
+3. Commit your changes with a clear message:
    ```bash
-   git commit -m "Add new MCP server: <name>"
+   git commit -m "Add new integration: <name>"
    ```
-5. Push your branch to your fork:
+4. Push your branch to your fork:
    ```bash
    git push origin your-branch-name
    ```
@@ -67,7 +58,7 @@ Follow these steps to get your environment ready and contribute:
 
 - Go to your fork on GitHub.
 - Click **"Compare & pull request"**.
-- Add a descriptive title and explain what your PR does.
+- Fill in the [pull request template](./.github/PULL_REQUEST_TEMPLATE.md) — summary, changes, and any related issues.
 - Hit **"Create pull request"**.
 
 One of the maintainers will review your contribution and work with you to get it merged.
@@ -75,7 +66,7 @@ One of the maintainers will review your contribution and work with you to get it
 ## Need Help?
 
 If you run into issues or have questions:
-- Check our [issues](https://github.com/metorial/mcp-containers/issues) page — someone else may have run into the same thing.
+- Check our [issues](https://github.com/metorial/metorial/issues) page — someone else may have run into the same thing.
 - Or feel free to open a new issue!
 
 Thanks again for contributing ❤️
