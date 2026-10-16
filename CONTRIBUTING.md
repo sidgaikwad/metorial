@@ -41,6 +41,67 @@ Follow these steps to get your environment ready and contribute:
    bun run packages:build
    ```
 
+## Adding a New Integration
+
+There is no scaffolding command. The easiest way to start is to copy an existing integration that resembles what you're building and rename it:
+
+```bash
+cp -r integrations/1password integrations/your-integration
+```
+
+Each integration directory looks like this:
+
+```
+integrations/<name>/
+├── slate.json           # Integration manifest (validated against ../../slate.schema.json)
+├── package.json         # @slates-integrations/<name>
+├── tsconfig.json
+├── vitest.config.ts
+├── logo.png             # or logo.svg
+├── README.md
+├── docs/
+│   └── SPEC.md
+└── src/
+    ├── index.ts         # Entry point
+    ├── auth.ts          # Authentication
+    ├── config.ts        # Configuration schema
+    ├── spec.ts          # Integration spec
+    ├── lib/             # API client and shared helpers
+    ├── tools/           # One file per tool
+    └── tools.schema.test.ts
+```
+
+### `slate.json`
+
+The manifest that describes your integration. It is validated against [`slate.schema.json`](./slate.schema.json):
+
+```json
+{
+  "name": "@metorial/your-integration",
+  "description": "A clear, specific description of what this integration does and which operations it exposes.",
+  "categories": ["apis-and-http-requests"],
+  "skills": ["do the first thing", "do the second thing"],
+  "logoUrl": "https://provider-logos.metorial-cdn.com/your-integration.png"
+}
+```
+
+### `package.json`
+
+Keep the name under the `@slates-integrations/` scope and keep the `build`, `test` and `typecheck` scripts:
+
+```json
+{
+  "name": "@slates-integrations/your-integration",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "bunx @vercel/ncc build src/index.ts -o dist -m -s",
+    "test": "vitest run --config vitest.config.ts --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  }
+}
+```
+
 ## Before You Submit
 
 1. Make sure your code follows any existing conventions and structure.
